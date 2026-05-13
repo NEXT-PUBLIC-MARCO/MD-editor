@@ -3,9 +3,8 @@ import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
-    <ThemeProvider>
+   
       <Editor />
-    </ThemeProvider>
   );
 }
 
