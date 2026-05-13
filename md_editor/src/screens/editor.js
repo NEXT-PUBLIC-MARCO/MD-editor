@@ -5,6 +5,7 @@ import PreviewComponent from '../components/previewComponent';
 import CommandPalette from '../components/CommandPalette';
 import { useTheme } from '../context/ThemeContext';
 import { getAllDocuments, saveDocument, deleteDocument } from '../db';
+import { use } from 'react';
 
 const SAMPLE = `# The unseen architecture
 
@@ -28,6 +29,9 @@ function Editor() {
   const [activeId, setActiveId] = useState(null);
   const [docu, setDoc] = useState([]);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [change, setChange] = useState(false)
+  const [remaninigId , setRemainingId] = useState(null)
+  const [draftTitle, setDraftTitle] = useState('')
   const { theme, toggleTheme } = useTheme();
   const saveTimer = useRef(null);
 
@@ -75,6 +79,28 @@ function Editor() {
     setDoc((prev) => [newDoc, ...prev]);
     setActiveId(newDoc.id);
   }
+
+
+   async function handleChangeTitle(title , id) {
+    setDoc((prev)  => 
+        prev.map((doc) => 
+            doc.id === id 
+            ?  {...doc , title : title, updatedAt : Date.now()}
+            : doc
+        )
+    );    
+    const updated =  docu.find((doc) => doc.id === id);
+    if(updated) {
+        await saveDocument({...updated , title : title , updatedAt : Date.now() })
+    }
+    
+
+
+  }
+
+
+
+    
 
   const handleChange = (value) => {
     if (!activeId) return;
@@ -257,18 +283,64 @@ function Editor() {
               key={doc.id}
               className={`side-item ${doc.id === activeId ? 'active' : ''}`}
               onClick={() => setActiveId(doc.id)}
+              tabIndex={0}
+              onKeyDown = {(e) => {
+                if(e.key === 'F2'){
+                  e.preventDefault()
+                  setChange(true);
+                  setRemainingId(doc.id)
+                  setDraftTitle(doc.title)
+                }
+              }}
             >
-              <span>{doc.title}</span>
-              <button
-                className="meta"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteDoc(doc.id);
-                }}
-                title="delete document"
-              >
-                del
-              </button>
+                {change && remaninigId === doc.id
+                ? (
+                  <input
+                    autoFocus
+                    value={draftTitle}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => setDraftTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        handleChangeTitle(draftTitle, doc.id)
+                        setChange(false)
+                        setRemainingId(null)
+                      } else if (e.key === 'Escape') {
+                        e.preventDefault()
+                        setChange(false)
+                        setRemainingId(null)
+                      }
+                    }}
+                    onBlur={() => {
+                      setChange(false)
+                      setRemainingId(null)
+                    }}
+                  />
+                )
+                :
+                (
+                  <>
+                   <span>{doc.title}</span>
+                   <button
+                   className="meta"
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     handleDeleteDoc(doc.id);
+                   }}
+                   title="delete document"
+                 >
+                   del
+                 </button>
+                  </>
+                ) 
+                
+              
+              
+              
+              
+              }
+               
             </div>
           ))}
 
