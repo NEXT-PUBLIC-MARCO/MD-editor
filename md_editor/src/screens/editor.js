@@ -24,7 +24,7 @@ const muse = () => 'patience';
 \`\`\`
 `;
 
-function Editor() {
+function Editor({ onSwitchToCV }) {
   const [isDirty, setIsDirty] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const [docu, setDoc] = useState([]);
@@ -260,6 +260,15 @@ function Editor() {
         </div>
 
         <div className="flex items-center gap-1">
+          {onSwitchToCV && (
+            <button
+              className="cv-toolbar-btn"
+              onClick={onSwitchToCV}
+              title="Open CV editor"
+            >
+              履 CV
+            </button>
+          )}
           <button
             className="icon-btn"
             onClick={toggleTheme}

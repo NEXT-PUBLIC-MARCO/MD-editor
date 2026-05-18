@@ -11,6 +11,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
     "marked": "^18.0.3",
+    "pdfjs-dist": "^4.0.379",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-scripts": "5.0.1",
