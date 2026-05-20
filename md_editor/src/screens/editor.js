@@ -5,7 +5,6 @@ import PreviewComponent from '../components/previewComponent';
 import CommandPalette from '../components/CommandPalette';
 import { useTheme } from '../context/ThemeContext';
 import { getAllDocuments, saveDocument, deleteDocument } from '../db';
-import { use } from 'react';
 
 const SAMPLE = `# The unseen architecture
 
@@ -223,6 +222,7 @@ function Editor({ onSwitchToCV }) {
         run: () => alert(`${words} words\n${readMin} min read`),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       theme,
       toggleTheme,
