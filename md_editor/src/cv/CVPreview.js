@@ -1,4 +1,4 @@
-import { CV_TYPES, label, isSectionVisible } from './model';
+import { CV_TYPES, label, isSectionVisible, contractTypeLabel } from './model';
 
 function parseYearMonth(value) {
     if (!value) return { year: '', month: '' };
@@ -251,7 +251,7 @@ function RirekishoPreview({ cv }) {
                                             <td>{start.month}</td>
                                             <td>
                                                 {company}{job} {lang === 'en' ? 'joined' : '入社'}
-                                                {row.contractType ? ` (${row.contractType})` : ''}
+                                                {row.contractType ? ` (${contractTypeLabel(row.contractType, lang)})` : ''}
                                             </td>
                                         </tr>
                                     );
@@ -314,7 +314,7 @@ function RirekishoPreview({ cv }) {
                                 <div className="cv-entry-sub">
                                     {row.companyName}
                                     {row.contractType && (
-                                        <span className="cv-entry-meta"> · {row.contractType}</span>
+                                        <span className="cv-entry-meta"> · {contractTypeLabel(row.contractType, lang)}</span>
                                     )}
                                 </div>
                                 {row.description && (

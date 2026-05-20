@@ -250,15 +250,24 @@ export function migrateLegacyCV(cv) {
 }
 
 export const CONTRACT_TYPES = [
-    { id: '', label: '—' },
-    { id: '正社員', label: '正社員 / Full-time' },
-    { id: '契約社員', label: '契約社員 / Contract' },
-    { id: 'パート', label: 'パート / Part-time' },
-    { id: '派遣', label: '派遣 / Dispatch' },
-    { id: 'インターン', label: 'インターン / Internship' },
-    { id: 'フリーランス', label: 'フリーランス / Freelance' },
-    { id: 'アルバイト', label: 'アルバイト / Casual' },
+    { id: '', label: '—', jp: '', en: '' },
+    { id: '正社員', label: '正社員 / Full-time', jp: '正社員', en: 'Full-time' },
+    { id: '契約社員', label: '契約社員 / Contract', jp: '契約社員', en: 'Contract' },
+    { id: 'パート', label: 'パート / Part-time', jp: 'パート', en: 'Part-time' },
+    { id: '派遣', label: '派遣 / Dispatch', jp: '派遣', en: 'Dispatch' },
+    { id: 'インターン', label: 'インターン / Internship', jp: 'インターン', en: 'Internship' },
+    { id: 'フリーランス', label: 'フリーランス / Freelance', jp: 'フリーランス', en: 'Freelance' },
+    { id: 'アルバイト', label: 'アルバイト / Casual', jp: 'アルバイト', en: 'Casual' },
 ];
+
+export function contractTypeLabel(value, lang) {
+    if (!value) return '';
+    const entry = CONTRACT_TYPES.find((c) => c.id === value);
+    if (!entry) return value;
+    if (lang === 'jp') return entry.jp;
+    if (lang === 'en') return entry.en;
+    return entry.jp && entry.en ? `${entry.jp} / ${entry.en}` : entry.jp || entry.en;
+}
 
 export function emptyCompany() {
     return {
